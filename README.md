@@ -14,12 +14,19 @@ Controls relays on a single GC-100 on your network.  If you have more than one y
 Python version 3.4 or higher required & Domoticz version 3.7xxx or greater.
 
 To install:
-* Go in your Domoticz directory, open the plugins directory and create a new one named 'GC-100' or similar.
+* Go in your Domoticz directory, open the plugins directory.
 * Navigate to the directory using a command line
-* Run: ```git pull https://github.com/dnpwwo/Domoticz-GlobalCache-Plugin.git```
+* Run: ```git clone https://github.com/dnpwwo/Domoticz-GlobalCache-Plugin.git```
 * Restart Domoticz.
 
 In the web UI, navigate to the Hardware page.  In the hardware dropdown there will be an entry called "Global Cache 100".
+
+## Updating
+
+To update:
+* Go in your Domoticz directory using a command line and open the plugins directory then the Domoticz-GlobalCache-Plugin directory.
+* Run: ```git pull```
+* Restart Domoticz.
 
 ## Configuration
 
