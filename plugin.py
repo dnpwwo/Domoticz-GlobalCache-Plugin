@@ -7,7 +7,7 @@
 #   Current version only supports Relay operations
 #
 """
-<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.1.7" externallink="//http://www.globalcache.com/products/gc-100/models1/">
+<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.1.8" externallink="//http://www.globalcache.com/products/gc-100/models1/">
     <params>
         <param field="Address" label="MAC Address" width="200px" required="true" default="0000000000000"/>
         <param field="Mode1" label="Relay 1 Control" width="100px">
@@ -37,10 +37,16 @@
                 <option label="5" value="5" />
             </options>
         </param>
-        <param field="Mode6" label="Debug" width="75px">
+        <param field="Mode6" label="Debug" width="150px">
             <options>
-                <option label="True" value="Debug"/>
-                <option label="False" value="Normal"  default="true" />
+                <option label="None" value="0"  default="true" />
+                <option label="Python Only" value="2"/>
+                <option label="Basic Debugging" value="62"/>
+                <option label="Basic+Messages" value="126"/>
+                <option label="Connections Only" value="16"/>
+                <option label="Connections+Python" value="18"/>
+                <option label="Connections+Queue" value="144"/>
+                <option label="All" value="-1"/>
             </options>
         </param>
     </params>
@@ -59,9 +65,9 @@ class BasePlugin:
         return
 
     def onStart(self):
-        if Parameters["Mode6"] == "Debug":
-            Domoticz.Debugging(1)
-        DumpConfigToLog()
+        if Parameters["Mode6"] != "0":
+            Domoticz.Debugging(int(Parameters["Mode6"]))
+            DumpConfigToLog()
 
         self.GC100Conn = Domoticz.Connection(Name="Beacon", Transport="UDP/IP", Address="239.255.250.250", Port=str(9131))
         self.GC100Conn.Listen()

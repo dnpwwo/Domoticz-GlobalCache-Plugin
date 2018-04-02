@@ -44,3 +44,4 @@ To update:
 | Version | Information|
 | ----- | ---------- |
 | 2.1.7 | Initial upload version |
+| 2.1.8 | Uplift debugging |
