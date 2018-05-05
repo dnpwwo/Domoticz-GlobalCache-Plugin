@@ -7,7 +7,7 @@
 #   Current version only supports Relay operations
 #
 """
-<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.2.0" externallink="//http://www.globalcache.com/products/gc-100/models1/">
+<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.2.3" externallink="//http://www.globalcache.com/products/gc-100/models1/">
     <params>
         <param field="Address" label="MAC Address" width="200px" required="true" default="0000000000000"/>
         <param field="Mode1" label="Relay 1 Control" width="100px">
@@ -35,6 +35,15 @@
                 <option label="3" value="3" />
                 <option label="4" value="4" />
                 <option label="5" value="5" />
+            </options>
+        </param>
+        <param field="Mode5" label="Ping fails before reconnect" width="40px">
+            <options>
+                <option label="5" value="5" default="true"/>
+                <option label="10" value="10" />
+                <option label="15" value="15" />
+                <option label="20" value="20" />
+                <option label="25" value="25" />
             </options>
         </param>
         <param field="Mode6" label="Debug" width="150px">
@@ -100,7 +109,7 @@ class BasePlugin:
                 dictAMXB = DecodeDDDMessage(strData)
                 if (dictAMXB['SDKClass'] == "Utility") and (dictAMXB['Make'] == "GlobalCache") and (dictAMXB['Model'].find("GC-100") >= 0):
                     if (dictAMXB["UUID"].find(Parameters["Address"]) >= 0):
-                        self.GC100Conn.Disconnect()
+                        if (self.GC100Conn != None): self.GC100Conn.Disconnect()
                         self.GC100Conn = Domoticz.Connection(Name="GC-100", Transport="TCP/IP", Protocol="Line", Address=Connection.Address, Port=str(4998))
                         self.GC100Conn.Connect()
                         Domoticz.Log(dictAMXB['Make']+" - "+dictAMXB['Model']+" with UUID '"+dictAMXB["UUID"]+"' discovered successfully at address: "+Connection.Address)
@@ -203,8 +212,9 @@ class BasePlugin:
                     if (self.lastPolled > 3): self.lastPolled = 1
                     self.GC100Conn.Send(Message="getstate,"+str(self.relayDeviceNo)+":"+str(self.lastPolled)+"\r")
 
-            if (self.lastResponse > 5):
-                Domoticz.Error(self.GC100Conn.Name+" has not responded to 5 pings, terminating connection.")
+            if (self.lastResponse > int(Parameters["Mode5"])):
+                Domoticz.Error(self.GC100Conn.Name+" has not responded to "+int(Parameters["Mode5"])+" pings, terminating connection.")
+                self.GC100Conn.Disconnect()
                 self.GC100Conn = None
                 self.lastResponse = -1
             self.lastResponse = self.lastResponse + 1

@@ -46,3 +46,4 @@ To update:
 | 2.1.7 | Initial upload version |
 | 2.1.8 | Uplift debugging |
 | 2.2.0 | Terminate UDP Listen connection explicitly |
+| 2.2.3 | Add parameter to control how many pings can be missed |
