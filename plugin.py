@@ -7,7 +7,7 @@
 #   Current version only supports Relay operations
 #
 """
-<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.2.3" externallink="//http://www.globalcache.com/products/gc-100/models1/">
+<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.2.4" externallink="//http://www.globalcache.com/products/gc-100/models1/">
     <params>
         <param field="Address" label="MAC Address" width="200px" required="true" default="0000000000000"/>
         <param field="Mode1" label="Relay 1 Control" width="100px">
@@ -213,7 +213,7 @@ class BasePlugin:
                     self.GC100Conn.Send(Message="getstate,"+str(self.relayDeviceNo)+":"+str(self.lastPolled)+"\r")
 
             if (self.lastResponse > int(Parameters["Mode5"])):
-                Domoticz.Error(self.GC100Conn.Name+" has not responded to "+int(Parameters["Mode5"])+" pings, terminating connection.")
+                Domoticz.Error(self.GC100Conn.Name+" has not responded to "+str(Parameters["Mode5"])+" pings, terminating connection.")
                 self.GC100Conn.Disconnect()
                 self.GC100Conn = None
                 self.lastResponse = -1
