@@ -7,7 +7,7 @@
 #   Current version only supports Relay operations
 #
 """
-<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.2.4" externallink="//http://www.globalcache.com/products/gc-100/models1/">
+<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.2.5" externallink="//http://www.globalcache.com/products/gc-100/models1/">
     <params>
         <param field="Address" label="MAC Address" width="200px" required="true" default="0000000000000"/>
         <param field="Mode1" label="Relay 1 Control" width="100px">
@@ -109,7 +109,7 @@ class BasePlugin:
                 dictAMXB = DecodeDDDMessage(strData)
                 if (dictAMXB['SDKClass'] == "Utility") and (dictAMXB['Make'] == "GlobalCache") and (dictAMXB['Model'].find("GC-100") >= 0):
                     if (dictAMXB["UUID"].find(Parameters["Address"]) >= 0):
-                        if (self.GC100Conn != None): self.GC100Conn.Disconnect()
+                        self.GC100Conn = None
                         self.GC100Conn = Domoticz.Connection(Name="GC-100", Transport="TCP/IP", Protocol="Line", Address=Connection.Address, Port=str(4998))
                         self.GC100Conn.Connect()
                         Domoticz.Log(dictAMXB['Make']+" - "+dictAMXB['Model']+" with UUID '"+dictAMXB["UUID"]+"' discovered successfully at address: "+Connection.Address)
@@ -205,20 +205,19 @@ class BasePlugin:
             self.GC100Conn.Listen()
         else:
             if (self.GC100Conn.Name != "Beacon"):
-                if (self.GC100Conn.Connected() == False):
+                if ((self.GC100Conn.Connecting() == False) and (self.GC100Conn.Connected() == False)):
                     self.GC100Conn.Connect()
                 else:
                     self.lastPolled = self.lastPolled + 1
                     if (self.lastPolled > 3): self.lastPolled = 1
-                    self.GC100Conn.Send(Message="getstate,"+str(self.relayDeviceNo)+":"+str(self.lastPolled)+"\r")
+                    if (self.GC100Conn.Connected()): self.GC100Conn.Send(Message="getstate,"+str(self.relayDeviceNo)+":"+str(self.lastPolled)+"\r")
 
             if (self.lastResponse > int(Parameters["Mode5"])):
                 Domoticz.Error(self.GC100Conn.Name+" has not responded to "+str(Parameters["Mode5"])+" pings, terminating connection.")
-                self.GC100Conn.Disconnect()
                 self.GC100Conn = None
                 self.lastResponse = -1
             self.lastResponse = self.lastResponse + 1
-                    
+
 global _plugin
 _plugin = BasePlugin()
 
