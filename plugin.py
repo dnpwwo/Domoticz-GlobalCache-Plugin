@@ -7,7 +7,7 @@
 #   Current version only supports Relay operations
 #
 """
-<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.2.5" externallink="//http://www.globalcache.com/products/gc-100/models1/">
+<plugin key="GC-100" name="Global Cache 100" author="dnpwwo" version="2.2.6" externallink="//http://www.globalcache.com/products/gc-100/models1/">
     <params>
         <param field="Address" label="MAC Address" width="200px" required="true" default="0000000000000"/>
         <param field="Mode1" label="Relay 1 Control" width="100px">
@@ -78,8 +78,6 @@ class BasePlugin:
             Domoticz.Debugging(int(Parameters["Mode6"]))
             DumpConfigToLog()
 
-        self.GC100Conn = Domoticz.Connection(Name="Beacon", Transport="UDP/IP", Address="239.255.250.250", Port=str(9131))
-        self.GC100Conn.Listen()
         Domoticz.Heartbeat(20)
         for Device in Devices:
             UpdateDevice(Device, Devices[Device].nValue, Devices[Device].sValue, 1)

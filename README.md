@@ -48,3 +48,4 @@ To update:
 | 2.2.0 | Terminate UDP Listen connection explicitly |
 | 2.2.3 | Add parameter to control how many pings can be missed |
 | 2.2.4 | Bugfix: Error when GC-100 not seen after 5 pings |
+| 2.2.6 | Make plugin wait until 1st heartbeat to attempt connection |
